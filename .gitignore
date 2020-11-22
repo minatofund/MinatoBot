@@ -10,3 +10,6 @@
 # pychache folder
 
 /__pycache__/
+
+# Pipfile
+/Pipfile
