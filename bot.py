@@ -1,6 +1,7 @@
 # bot.py
+import emoji
 import os
-import cosmos_like_utils
+import cosmos_like_utils, subgraph_utils
 from discord.ext import commands
 from dotenv import load_dotenv
 
@@ -25,6 +26,15 @@ async def faucet(ctx, project_name: str):
         response = cosmos_like_utils.request_faucet(project_name)
     else:
         response = 'Not valid project name.'
+    await ctx.send(response)
+
+
+@bot.command(name='luaswap_user', help='Query Luaswap user by Subgraph')
+async def luaswap_user(ctx, address: str):
+    try:
+        response = subgraph_utils.get_luaswap_user(address)
+    except:
+        response = emoji.emojize('Something is wrong, try it later. :cry:')
     await ctx.send(response)
 
 

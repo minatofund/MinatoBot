@@ -8,7 +8,6 @@
 /.idea/
 
 # pychache folder
-
 /__pycache__/
 
 # Pipfile
