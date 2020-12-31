@@ -10,10 +10,16 @@ def get_validator_status(project_name: str):
     if project_name == 'Desmos':
         endpoint = os.getenv('DESMOS_LCD_ENDPOINT')
         validator_address = os.getenv('DESMOS_VALIDATOR_ADDRESS')
-
+        return _get_validator_status_rest(endpoint, validator_address)
+    if project_name == 'Bluzelle':
+        endpoint = os.getenv('BLUZELLE_GRAPHQL_ENDPOINT')
+        validator_address = os.getenv('BLUZELLE_VALIDATOR_ADDRESS')
+        return _get_validator_status_graphql(endpoint, validator_address)
     else:
         return 'Not valid project name.'
 
+
+def _get_validator_status_rest(endpoint: str, validator_address: str):
     url = endpoint + '/staking/validators/' + validator_address
     r = requests.get(url)
     r_json = r.json()
@@ -26,6 +32,29 @@ def get_validator_status(project_name: str):
     else:
         return emoji.emojize('Validator is inactive, please check. :x: ') \
                    + 'Jailed: {}, Status: {}'.format(jailed, status)
+
+
+def _get_validator_status_graphql(endpoint: str, validator_address: str):
+    query = """
+    {
+        validators {   
+            valoper
+            moniker
+            jailed
+        }
+    }
+    """
+    r = requests.post(endpoint, json={'query': query})
+    r_json = r.json()
+    validators = r_json['data']['validators']
+    for validator in validators:
+        if validator['valoper'] == validator_address:
+            if not validator['jailed']:
+                return emoji.emojize('Validator is active. :white_check_mark:')
+            else:
+                return emoji.emojize('Validator is inactive, please check. :x: ') \
+                       + 'Jailed: {}'.format(validator['jailed'])
+    return emoji.emojize('Validator not found. :cry:')
 
 
 def request_faucet(project_name: str):

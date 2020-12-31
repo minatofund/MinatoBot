@@ -13,7 +13,7 @@ bot = commands.Bot(command_prefix=commands.when_mentioned)
 
 @bot.command(name='validator_status', help='Show validator status with given project name')
 async def validator_status(ctx, project_name: str):
-    if project_name == 'Desmos':
+    if project_name in ('Desmos', 'Bluzelle'):
         response = cosmos_like_utils.get_validator_status(project_name)
     else:
         response = 'Not valid project name.'
