@@ -15,3 +15,11 @@ def is_mina_node_synced():
         return sync_status == 'SYNCED'
     except:
         return False
+
+
+def is_slot_available():
+    endpoint = os.getenv('SLOT_QUERY_ENDPOINT')
+    r = requests.get(endpoint)
+    r_json = r.json()
+    return r_json['status'] == 0
+

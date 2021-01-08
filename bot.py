@@ -45,7 +45,7 @@ async def on_ready():
     print('MinatoBot is ready.')
 
 
-@tasks.loop(seconds=10)
+@tasks.loop(minutes=10)
 async def check_status():
     await bot.wait_until_ready()
     if not cosmos_like_utils.is_validator_active('Desmos'):
@@ -58,6 +58,9 @@ async def check_status():
     # Now Mina Testnet is not stable, pause monitoring.
     # if not monitor_misc_utils.is_mina_node_synced():
         # await channel.send('@here Mina node is inactive, please check!')
+    if monitor_misc_utils.is_slot_available():
+        channel = bot.get_channel(int(CHANNEL_ID))
+        await channel.send('@here Slot is available, please check!')
 
 
 def run_bot():
