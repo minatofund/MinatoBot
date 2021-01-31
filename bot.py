@@ -48,13 +48,12 @@ async def on_ready():
 @tasks.loop(minutes=10)
 async def check_status():
     await bot.wait_until_ready()
+    # Now Desmos node is paused, no need to monitor.
+    '''
     if not cosmos_like_utils.is_validator_active('Desmos'):
         channel = bot.get_channel(int(CHANNEL_ID))
-        # Now Desmos node is paused, no need to monitor.
-        # await channel.send('@here Desmos node is inactive, please check!')
-    if not cosmos_like_utils.is_validator_active('Bluzelle'):
-        channel = bot.get_channel(int(CHANNEL_ID))
-        await channel.send('@here Bluzelle node is inactive, please check!')
+        await channel.send('@here Desmos node is inactive, please check!')
+    '''
     # Now Mina Testnet is not stable, pause monitoring.
     # if not monitor_misc_utils.is_mina_node_synced():
         # await channel.send('@here Mina node is inactive, please check!')
